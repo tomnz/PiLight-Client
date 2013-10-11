@@ -1,5 +1,6 @@
 import settings
 import pika
+import pika.exceptions
 import base64
 import traceback
 import sys
@@ -9,9 +10,13 @@ class PilightClient(object):
 
     def run_client(self, spidev):
         # Prepare the pika connection
-        connection = pika.BlockingConnection(
-            pika.ConnectionParameters(host=settings.PILIGHT_HOST, port=settings.PILIGHT_PORT)
-        )
+        try:
+            connection = pika.BlockingConnection(
+                pika.ConnectionParameters(host=settings.PILIGHT_HOST, port=settings.PILIGHT_PORT)
+            )
+        except pika.exceptions.AMQPConnectionError:
+            print 'Error connecting to RabbitMQ server - please check settings'
+            return
         channel = connection.channel()
         channel.queue_declare(
             queue=settings.PILIGHT_QUEUE_NAME,

@@ -41,6 +41,6 @@ Once you've gone through all the installation steps, you're ready to run PiLight
 
 Simply run the following command:
 
-    python pilight-client.py
+    sudo python pilight-client.py
 
 This will attempt to connect to the target RabbitMQ server and await color data.
