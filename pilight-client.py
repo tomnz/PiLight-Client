@@ -29,6 +29,7 @@ class PilightClient(object):
 
         # Loop until interrupted
         for method, properties, body in channel.consume(settings.PILIGHT_QUEUE_NAME):
+            channel.basic_ack(method.delivery_tag)
             raw_data = bytearray(base64.b64decode(body))
             if not settings.NOOP:
                 spidev.write(raw_data)
