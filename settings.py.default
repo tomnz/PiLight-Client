@@ -1,0 +1,15 @@
+############
+# App config
+
+# RabbitMQ server to connect to
+PILIGHT_HOST = 'localhost'
+PILIGHT_PORT = 5672
+
+# RabbitMQ queue name
+PILIGHT_QUEUE_NAME = 'pilight-colors'
+
+# Device name for the SPI output in your Occidentals installation
+SPI_DEV_NAME = '/dev/spidev0.0'
+
+# Used for debugging purposes only
+NOOP = False
