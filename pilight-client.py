@@ -4,6 +4,8 @@ import pika.exceptions
 import base64
 import traceback
 import sys
+import time
+from pika.exceptions import ConnectionClosed
 
 
 class PilightClient(object):
@@ -22,6 +24,8 @@ class PilightClient(object):
         spidev.flush()
 
     def run_client(self, spidev):
+        print 'PiLight Client running...'
+
         # Prepare the pika connection
         try:
             connection = pika.BlockingConnection(
@@ -61,13 +65,24 @@ if not settings.NOOP:
         traceback.print_exc(file=sys.stdout)
         exit(-1)
 
-print 'PiLight Client running...'
 client = PilightClient()
-try:
-    # Run the actual driver loop
-    client.run_client(spidev)
-except KeyboardInterrupt:
-    # The user has interrupted execution - close our resources
-    if spidev:
-        client.clear_lights(spidev)
-        spidev.close()
+while True:
+    try:
+        # Run the actual driver loop
+        client.run_client(spidev)
+    except KeyboardInterrupt:
+        # The user has interrupted execution - close our resources
+        if spidev:
+            client.clear_lights(spidev)
+            spidev.close()
+            spidev = None
+        exit(0)
+    except:
+        # Eat any other exceptions - retry connecting in 30s
+        print 'Connection lost - retrying in 30s'
+        time.sleep(30)
+    finally:
+        if spidev:
+            client.clear_lights(spidev)
+            spidev.close()
+            spidev = None
