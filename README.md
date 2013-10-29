@@ -43,4 +43,13 @@ Simply run the following command:
 
     sudo python pilight-client.py
 
-This will attempt to connect to the target RabbitMQ server and await color data.
+This will attempt to connect to the target RabbitMQ server and await color data. If you receive a connection error, make sure you've configured the host name correctly, that RabbitMQ is running on the server, and that the RabbitMQ port is opened on your firewall.
+
+
+Updating
+--------
+
+Periodically you may want to update PiLight Client to get the latest features and bug fixes. Just run the following commands from the `pilight-client` directory:
+
+    hg pull
+    hg update
