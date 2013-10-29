@@ -70,6 +70,8 @@ while True:
     try:
         # Run the actual driver loop
         client.run_client(spidev)
+        # Sometimes we exit without an exception - always wait before retrying
+        time.sleep(30)
     except KeyboardInterrupt:
         # The user has interrupted execution - close our resources
         if spidev:
