@@ -54,20 +54,20 @@ class PilightClient(object):
                 spidev.flush()
 
 
-# Attempt to open the SPI device
-spidev = None
-if not settings.NOOP:
-    try:
-        spidev = file(settings.SPI_DEV_NAME, 'wb')
-    except:
-        # Ugly catch-all...
-        print 'Exception opening SPI device!'
-        traceback.print_exc(file=sys.stdout)
-        exit(-1)
-
 client = PilightClient()
 while True:
+    spidev = None
     try:
+        # Attempt to open the SPI device
+        if not settings.NOOP:
+            try:
+                spidev = file(settings.SPI_DEV_NAME, 'wb')
+            except:
+                # Ugly catch-all...
+                print 'Exception opening SPI device!'
+                traceback.print_exc(file=sys.stdout)
+                exit(-1)
+
         # Run the actual driver loop
         client.run_client(spidev)
         # Sometimes we exit without an exception - always wait before retrying
